@@ -80,6 +80,7 @@ public class PantallaPrincipalUsuario extends AppCompatActivity {
         return true; }
 
     public boolean onOptionsItemSelected(MenuItem item){
+
         switch (item.getItemId()){
             case R.id.BotonMenuCerrarSesion:
                 CerrarSesion();
@@ -87,6 +88,7 @@ public class PantallaPrincipalUsuario extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+
         }
     }
 

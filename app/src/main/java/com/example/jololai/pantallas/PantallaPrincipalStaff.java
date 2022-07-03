@@ -54,6 +54,7 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
                 Intent intent = new Intent(PantallaPrincipalStaff.this, ListaDeUsuarios.class);
                 intent.putExtra("SesionActual", "StaffActivo");
                 startActivity(intent);
+
             }
         });
 
@@ -64,6 +65,7 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
                 Intent intent = new Intent(PantallaPrincipalStaff.this, PantallaDeCanciones.class);
                 intent.putExtra("SesionActual", "StaffActivo");
                 startActivity(intent);
+
             }
         });
 
@@ -74,6 +76,7 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
                 Intent intent = new Intent(PantallaPrincipalStaff.this, PantallaDeVideos.class);
                 intent.putExtra("SesionActual", "StaffActivo");
                 startActivity(intent);
+
             }
         });
 

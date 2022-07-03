@@ -2,7 +2,10 @@ package com.example.jololai.crud_usuarios;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,8 +15,12 @@ import android.widget.Toast;
 
 import com.example.jololai.R;
 import com.example.jololai.db.DbUsuarios;
-import com.example.jololai.pantallas.PantallaPrincipalStaff;
+import com.example.jololai.entidades.Usuarios;
+import com.example.jololai.pantallas.PantallaPrincipal;
 import com.example.jololai.pantallas.PantallaPrincipalUsuario;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AgregarUsuario extends AppCompatActivity {
 
@@ -65,11 +72,13 @@ public class AgregarUsuario extends AppCompatActivity {
 
                             if (ingresar == true){
 
-                                Toast.makeText(AgregarUsuario.this, "Se registró con éxito", Toast.LENGTH_SHORT).show();
                                 inicioSesion(usuarioString);
                                 Intent intent = new Intent(getApplicationContext(), PantallaPrincipalUsuario.class);
                                 limpiar();
                                 startActivity(intent);
+
+                                Toast.makeText(AgregarUsuario.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+
                             } else {
                                 Toast.makeText(AgregarUsuario.this, "Registro Fallido, intente nuevamente", Toast.LENGTH_SHORT).show();
                             }
@@ -114,6 +123,5 @@ public class AgregarUsuario extends AppCompatActivity {
             }
         });
     }
-
 
 }

@@ -180,6 +180,8 @@ public class VerCancionInfo extends AppCompatActivity {
         final DbUsuarios dbUsuarios = new DbUsuarios(VerCancionInfo.this);
         Usuario = dbUsuarios.verUsuarios(UsuarioSesionActual);
 
+        Log.e("SESION ACTUAL", String.valueOf(UsuarioSesionActual));
+
         contraseñaUsuario = Usuario.getContraseña();
         comprasUsuario = Usuario.getCompras_realizadas();
         comprasDespues = comprasUsuario + 1 ;

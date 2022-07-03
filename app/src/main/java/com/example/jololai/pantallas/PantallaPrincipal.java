@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 import com.example.jololai.R;
 import com.example.jololai.crud_usuarios.AgregarUsuario;
 import com.example.jololai.crud_usuarios.IniciarSesion;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**********************
  *                    *
@@ -22,6 +25,8 @@ import com.example.jololai.crud_usuarios.IniciarSesion;
 public class PantallaPrincipal extends AppCompatActivity {
 
     ImageButton RegistrarUsuario, BotonIniciarSesion, CosasStaff;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,6 @@ public class PantallaPrincipal extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 }
+

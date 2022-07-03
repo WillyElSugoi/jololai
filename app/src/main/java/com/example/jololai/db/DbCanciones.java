@@ -4,11 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.jololai.entidades.Canciones;
 import com.example.jololai.entidades.Canciones;
+import com.example.jololai.entidades.Usuarios;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -16,9 +21,20 @@ public class DbCanciones extends DbHelper {
 
     Context context;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     public DbCanciones(@Nullable Context context) {
         super(context);
         this.context = context;
+    }
+
+    private void iniciarFirebase() {
+
+        FirebaseApp.initializeApp(context.getApplicationContext());
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
     }
 
     public long insertarCancion(String nombre,
@@ -42,6 +58,37 @@ public class DbCanciones extends DbHelper {
             values.put("id_idol", id_idol);
 
             id = db.insert(TABLE_SONGS, null, values);
+
+            Cursor awa = db.rawQuery("SELECT * FROM " + TABLE_SONGS + " ORDER BY 1 DESC LIMIT 1", null);
+
+            iniciarFirebase();
+
+            if(awa.moveToFirst()){
+                do {
+                    Canciones cancion = new Canciones();
+                    int idInt = awa.getInt(0);
+
+                    cancion.setId(idInt);
+                    Log.e("ID DE LA CANCIÓN CTM", String.valueOf(idInt));
+
+                    cancion.setNombre(nombre);
+                    Log.e("Nombre cancion", nombre);
+
+                    cancion.setTipo_cancion(tipo_cancion);
+                    Log.e("tipo cancion", tipo_cancion);
+
+                    cancion.setLetra_cancion(letra_cancion);
+                    Log.e("letra cancion", letra_cancion);
+
+                    cancion.setImagen_cancionString(String.valueOf(imagen_cancion));
+                    cancion.setId_idol(id_idol);
+
+                    Log.e("idol id", String.valueOf(id_idol));
+
+                    databaseReference.child("Canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
+
+                } while (awa.moveToNext());
+            }
 
         } catch (Exception ex) {
             ex.toString();
@@ -120,12 +167,36 @@ public class DbCanciones extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
             db.execSQL("UPDATE " + TABLE_SONGS + " SET nombre = '" + nombre + "', tipo_cancion = '" + tipo_cancion + "'," +
                     " letra_cancion = '" + letra_cancion + "', imagen_cancion = '" + imagen_cancion + "'," +
                     "id_idol = '" + id_Idol + "' WHERE id = '" + id + "' ");
 
             correcto = true;
+
+            Canciones cancion = new Canciones();
+
+            cancion.setId(id);
+            Log.e("id cancion", String.valueOf(id));
+
+            cancion.setNombre(nombre);
+            Log.e("Nombre cancion", nombre);
+
+            cancion.setTipo_cancion(tipo_cancion);
+            Log.e("tipo cancion", tipo_cancion);
+
+            cancion.setLetra_cancion(letra_cancion);
+            Log.e("letra cancion", letra_cancion);
+
+            cancion.setImagen_cancionString(String.valueOf(imagen_cancion));
+            Log.e("imagen cancion", String.valueOf(imagen_cancion));
+
+            cancion.setId_idol(id_Idol);
+            Log.e("idol id", String.valueOf(id_Idol));
+
+            databaseReference.child("Canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
 
         } catch (Exception ex) {
             ex.toString();
@@ -144,9 +215,15 @@ public class DbCanciones extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
             db.execSQL("DELETE FROM " + TABLE_SONGS + " WHERE id = '" + id + "'");
             correcto = true;
+
+            String IdS = Integer.toString(id);
+            databaseReference.child("Canciones").child(IdS).removeValue();
+
         } catch (Exception ex) {
             ex.toString();
             correcto = false;

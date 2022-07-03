@@ -39,7 +39,7 @@ public class AgregarCanciones extends AppCompatActivity {
     Button botonAgregarCancion;
 
     Spinner spinnerNombreCantante;
-    String idolCantanteString; /* pasarlo a string*/
+    String idolCantanteString; /* pasarlo a string */
 
     ArrayList<String> listaNombreIdols;
     ArrayList<Idols> listaIdols;
@@ -154,8 +154,6 @@ public class AgregarCanciones extends AppCompatActivity {
                     Log.e("aaaaaaaa", "ctm");
 
                 }
-
-
             }
         });
 
@@ -183,7 +181,6 @@ public class AgregarCanciones extends AppCompatActivity {
 
                 } else {
 
-
                     DbCanciones dbCanciones = new DbCanciones(AgregarCanciones.this);
 
                     int idSpinner = (int) spinnerNombreCantante.getSelectedItemId();
@@ -196,7 +193,6 @@ public class AgregarCanciones extends AppCompatActivity {
                                 textoLetraCanción.getText().toString(),
                                 imageInBytesCancion,
                                 idIdol);
-
 
                         if (id > 0) {
 

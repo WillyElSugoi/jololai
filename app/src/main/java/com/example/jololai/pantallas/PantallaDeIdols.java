@@ -50,6 +50,7 @@ public class PantallaDeIdols extends AppCompatActivity {
                 Intent agregarIdols = new Intent(PantallaDeIdols.this, AgregarIdol.class);
                 agregarIdols.putExtra("SesionActual", UsuarioSesionActual);
                 startActivity(agregarIdols);
+
             }
         });
 

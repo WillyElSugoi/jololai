@@ -9,6 +9,10 @@ public class Canciones {
     private String letra_cancion;
     private byte[] imagen_cancion;
     private int id_idol;
+    private String imagen_cancionString;
+
+    public Canciones() {
+    }
 
     public int getId() {
         return id;
@@ -58,7 +62,13 @@ public class Canciones {
         this.imagen_cancion = imagen_cancion;
     }
 
+    public String getImagen_cancionString() {
+        return imagen_cancionString;
+    }
 
+    public void setImagen_cancionString(String imagen_cancionString) {
+        this.imagen_cancionString = imagen_cancionString;
+    }
 }
 
 
