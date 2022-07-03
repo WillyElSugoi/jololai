@@ -96,6 +96,7 @@ public class VerUsuarioInfo extends AppCompatActivity {
             }
         });
 
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -128,6 +129,8 @@ public class VerUsuarioInfo extends AppCompatActivity {
 
     private void lista(){
         Intent intent = new Intent(this, ListaDeUsuarios.class);
+        intent.putExtra("SesionActual", usuarioAEditar);
         startActivity(intent);
     }
+
 }

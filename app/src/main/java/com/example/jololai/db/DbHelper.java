@@ -16,6 +16,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_VIDEOS = "t_videos";
     public static final String TABLE_REP_VID = "t_rep_videos";
     public static final String TABLE_COM_CAN = "t_com_canciones";
+    public static final String TABLE_CONCIERTO = "t_concierto";
 
 
     public DbHelper(@Nullable Context context) {
@@ -73,6 +74,13 @@ public class DbHelper extends SQLiteOpenHelper {
                 "nombre_usuario TEXT NOT NULL," +
                 "id_cancion INTEGER," +
                 "mes TEXT NOT NULL)");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_CONCIERTO + "(" +
+                "ID_Concierto PRIMARY KEY AUTOINCREMENT," +
+                "Nombre_Concierto TEXT NOT NULL," +
+                "ID_Idol INTEGER," +
+                "Fecha_Concierto TEXT NOT NULL," +
+                "Duracion_Minutos INTEGER)");
 
     }
 

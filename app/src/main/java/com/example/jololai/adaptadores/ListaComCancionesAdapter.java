@@ -1,6 +1,7 @@
 package com.example.jololai.adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jololai.R;
 import com.example.jololai.db.DbCanciones;
+import com.example.jololai.db.DbVideos;
 import com.example.jololai.entidades.ComCanciones;
 import com.example.jololai.entidades.Canciones;
 
@@ -33,6 +35,18 @@ public class ListaComCancionesAdapter extends RecyclerView.Adapter<ListaComCanci
         listaOriginal.addAll(listaComCanciones);
     }
 
+    private void nombreCancion(int idCancion) {
+
+        final DbCanciones dbCanciones = new DbCanciones(context);
+
+        if (dbCanciones.VerExisteCancion(idCancion) == true){
+            Cancion = dbCanciones.verCancion(idCancion);
+            nombreCancion = Cancion.getNombre();
+        } else {
+            nombreCancion = "Canción eliminada";
+        }
+    }
+
     @NonNull
     @Override
     public ListaComCancionesAdapter.comCancionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,14 +65,6 @@ public class ListaComCancionesAdapter extends RecyclerView.Adapter<ListaComCanci
         holder.textoNombreUsuario.setText(listaComCanciones.get(position).getNombre_usuario());
         holder.textoMes.setText(listaComCanciones.get(position).getMes());
 
-    }
-
-    private void nombreCancion(int idCancion) {
-
-        final DbCanciones dbCanciones = new DbCanciones(context);
-        Cancion = dbCanciones.verCancion(idCancion);
-
-        nombreCancion = Cancion.getNombre();
     }
 
     @Override

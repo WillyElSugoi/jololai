@@ -2,6 +2,8 @@ package com.example.jololai.adaptadores;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.example.jololai.entidades.Videos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.stream.Collectors;
 
 public class ListaRepVideosAdapter extends RecyclerView.Adapter<ListaRepVideosAdapter.repVideoViewHolder> {
@@ -36,6 +39,22 @@ public class ListaRepVideosAdapter extends RecyclerView.Adapter<ListaRepVideosAd
         this.listaRepVideos = listaRepVideos;
         listaOriginal = new ArrayList<>();
         listaOriginal.addAll(listaRepVideos);
+    }
+
+    private void nombreVideo(int idVideo) {
+
+        final DbVideos dbVideos = new DbVideos(context);
+
+        Log.e("id video", String.valueOf(idVideo));
+
+        Log.e("existe o no", String.valueOf(dbVideos.VerExisteVideo(idVideo)));
+
+        if (dbVideos.VerExisteVideo(idVideo) == true){
+            Video = dbVideos.verVideo(idVideo);
+            nombreVideo = Video.getNombreVideo();
+        } else {
+            nombreVideo = "Video eliminado";
+        }
     }
 
     @NonNull
@@ -56,14 +75,6 @@ public class ListaRepVideosAdapter extends RecyclerView.Adapter<ListaRepVideosAd
         holder.textoNombreUsuario.setText(listaRepVideos.get(position).getNombre_usuario());
         holder.textoMes.setText(listaRepVideos.get(position).getMes());
 
-    }
-
-    private void nombreVideo(int idVideo) {
-
-        final DbVideos dbVideos = new DbVideos(context);
-        Video = dbVideos.verVideo(idVideo);
-
-        nombreVideo = Video.getNombreVideo();
     }
 
     @Override

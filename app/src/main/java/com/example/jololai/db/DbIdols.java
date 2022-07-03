@@ -4,10 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.DebugUtils;
 
 import androidx.annotation.Nullable;
 
 import com.example.jololai.entidades.Idols;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -15,9 +19,20 @@ public class DbIdols extends DbHelper {
 
     Context context;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     public DbIdols(@Nullable Context context) {
         super(context);
         this.context = context;
+    }
+
+    private void iniciarFirebase() {
+
+        FirebaseApp.initializeApp(context.getApplicationContext());
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
     }
 
     public long insertarIdol(String nombre,
@@ -54,6 +69,35 @@ public class DbIdols extends DbHelper {
             values.put("imagen", imagen);
 
             id = db.insert(TABLE_IDOLS, null, values);
+
+            Cursor buscarId = db.rawQuery("SELECT * FROM " + TABLE_IDOLS + " ORDER BY 1 DESC LIMIT 1", null);
+
+            iniciarFirebase();
+
+            if (buscarId.moveToFirst()){
+                do {
+                    Idols idol = new Idols();
+                    int idInt= buscarId.getInt(0);
+
+                    idol.setId(idInt);
+                    idol.setNombre(nombre);
+                    idol.setNombreOriginal(nombre_original);
+                    idol.setEstado(estado);
+                    idol.setUnidad(unidad);
+                    idol.setGeneracion(generacion);
+                    idol.setDebut(debut);
+                    idol.setNickname(nickname);
+                    idol.setCumple(cumple);
+                    idol.setAltura(altura);
+                    idol.setDisenador(disenador);
+                    idol.setBio(bio);
+                    idol.setImagenString(String.valueOf(imagen));
+
+                    databaseReference.child("Idols").child(String.valueOf(idol.getId())).setValue(idol);
+
+                } while (buscarId.moveToNext());
+            }
+
         } catch (Exception ex) {
             ex.toString();
         }
@@ -150,6 +194,8 @@ public class DbIdols extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
             db.execSQL("UPDATE " + TABLE_IDOLS + " SET nombre = '" + nombre + "', nombre_original = '" + nombre_original + "'," +
                     " estado = '" + estado + "', unidad = '" + unidad + "'," +
@@ -157,7 +203,27 @@ public class DbIdols extends DbHelper {
                     " nickname = '" + nickname + "', cumple = '" + cumple + "'," +
                     " altura = '" + altura + "', disenador = '" + disenador + "'," +
                     " bio = '" + bio + "', imagen = '" + imagen + "' WHERE id='" + id + "' ");
+
             correcto = true;
+
+            Idols idol = new Idols();
+
+            idol.setId(id);
+            idol.setNombre(nombre);
+            idol.setNombreOriginal(nombre_original);
+            idol.setEstado(estado);
+            idol.setUnidad(unidad);
+            idol.setGeneracion(generacion);
+            idol.setDebut(debut);
+            idol.setNickname(nickname);
+            idol.setCumple(cumple);
+            idol.setAltura(altura);
+            idol.setDisenador(disenador);
+            idol.setBio(bio);
+            idol.setImagenString(String.valueOf(imagen));
+
+            databaseReference.child("Idols").child(String.valueOf(idol.getId())).setValue(idol);
+
         } catch (Exception ex) {
             ex.toString();
             correcto = false;
@@ -175,9 +241,15 @@ public class DbIdols extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
             db.execSQL("DELETE FROM " + TABLE_IDOLS + " WHERE id = '" + id + "'");
             correcto = true;
+
+            String idString = String.valueOf(id);
+            databaseReference.child("Idols").child(idString).removeValue();
+
         } catch (Exception ex) {
             ex.toString();
             correcto = false;

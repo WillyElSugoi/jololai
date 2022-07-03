@@ -9,6 +9,7 @@ public class Videos {
     private byte[] imagen_video;
     private String link;
     private int id_idol;
+    private String imagenVideoString;
 
     public int getId() {
         return id;
@@ -66,4 +67,11 @@ public class Videos {
         this.link = link;
     }
 
+    public String getImagenVideoString() {
+        return imagenVideoString;
+    }
+
+    public void setImagenVideoString(String imagenVideoString) {
+        this.imagenVideoString = imagenVideoString;
+    }
 }

@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 
 import com.example.jololai.entidades.ComCanciones;
+import com.example.jololai.entidades.RepVideos;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -15,9 +19,20 @@ public class DbComCanciones extends DbHelper {
 
     Context context;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     public DbComCanciones(@Nullable Context context) {
         super(context);
         this.context = context;
+    }
+
+    private void iniciarFirebase() {
+
+        FirebaseApp.initializeApp(context.getApplicationContext());
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
     }
 
     public long insertarComCancion(String nombre_usuario,
@@ -28,6 +43,8 @@ public class DbComCanciones extends DbHelper {
 
         try {
 
+            iniciarFirebase();
+
             DbHelper dbHelper = new DbHelper(context);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -37,6 +54,23 @@ public class DbComCanciones extends DbHelper {
             values.put("mes", mes);
 
             id = db.insert(TABLE_COM_CAN, null, values);
+
+            Cursor buscarId = db.rawQuery("SELECT * FROM " + TABLE_COM_CAN + " ORDER BY 1 DESC LIMIT 1", null);
+
+            if (buscarId.moveToFirst()){
+                do {
+                    ComCanciones comCanciones = new ComCanciones();
+                    int idInt = buscarId.getInt(0);
+
+                    comCanciones.setId(idInt);
+                    comCanciones.setNombre_usuario(nombre_usuario);
+                    comCanciones.setId_cancion(id_cancion);
+                    comCanciones.setMes(mes);
+
+                    databaseReference.child("compra_canciones").child(String.valueOf(comCanciones.getId())).setValue(comCanciones);
+
+                } while (buscarId.moveToNext());
+            }
 
         } catch (Exception ex) {
 

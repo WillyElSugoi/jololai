@@ -145,14 +145,23 @@ public class DbUsuarios extends DbHelper {
                                  String contraseña) {
 
         boolean correcto = false;
+        String usuarioAux = usuario;
 
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         try {
-            db.execSQL("UPDATE " + TABLE_USERS + " SET compras_realizadas = '" + compras_realizadas + "', contraseña = '" + contraseña +"' WHERE usuario = '" + usuario + "'");
+            db.execSQL("UPDATE " + TABLE_USERS + " SET usuario ='" + usuarioAux + "', compras_realizadas = '" + compras_realizadas + "', contraseña = '" + contraseña +"' WHERE usuario = '" + usuario + "'");
 
             correcto = true;
+
+            iniciarFirebase();
+
+            Usuarios usuarios = new Usuarios();
+            usuarios.setUsuario(usuarioAux);
+            usuarios.setCompras_realizadas(compras_realizadas);
+            usuarios.setContraseña(contraseña);
+            databaseReference.child("Usuario").child(usuarios.getUsuario()).setValue(usuarios);
 
         } catch (Exception ex) {
             ex.toString();
@@ -172,9 +181,15 @@ public class DbUsuarios extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
             db.execSQL("DELETE FROM " + TABLE_USERS + " WHERE usuario = '" + usuario + "'");
             correcto = true;
+
+            Log.e("eliminao", usuario);
+            databaseReference.child("Usuario").child(usuario).removeValue();
+
         } catch (Exception ex) {
             ex.toString();
             correcto = false;

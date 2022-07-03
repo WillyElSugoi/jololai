@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.jololai.R;
+import com.example.jololai.crud_conciertos.AgregarConcierto;
 import com.example.jololai.crud_usuarios.ListaDeUsuarios;
 import com.example.jololai.registros.ListaDeComprasCanciones;
 import com.example.jololai.registros.ListaDeReproduccionVideos;
@@ -21,6 +22,7 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
     ImageButton botonVideos;
     ImageButton botonComprasCanciones;
     ImageButton botonReproducciones;
+    ImageButton botonVerConciertos;
 
     Button botonReportes;
 
@@ -35,6 +37,7 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
         botonVideos = findViewById(R.id.verPantallaVideoStaff);
         botonReproducciones = findViewById(R.id.verHistorialVideos);
         botonComprasCanciones = findViewById(R.id.verHistorialCompraCanciones);
+        botonVerConciertos = findViewById(R.id.verConciertos);
 
         botonIdols.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +99,26 @@ public class PantallaPrincipalStaff extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(PantallaPrincipalStaff.this, ListaDeComprasCanciones.class);
+                startActivity(intent);
+
+            }
+        });
+
+        botonComprasCanciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(PantallaPrincipalStaff.this, ListaDeComprasCanciones.class);
+                startActivity(intent);
+
+            }
+        });
+
+        botonVerConciertos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(PantallaPrincipalStaff.this, AgregarConcierto.class);
                 startActivity(intent);
 
             }

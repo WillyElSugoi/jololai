@@ -184,30 +184,23 @@ public class VerVideoInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                /********** bdd para el registro de reproducción **********/
+            /********** bdd para el registro de reproducción **********/
 
-                DbRepVideos dbRepVideos = new DbRepVideos(VerVideoInfo.this);
-
-                if (!UsuarioSesionActual.equals("StaffActivo")){
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Video.getLink().toString()));
-                    startActivity(intent);
+            DbRepVideos dbRepVideos = new DbRepVideos(VerVideoInfo.this);
 
 
-                    long id = dbRepVideos.insertarRepVideo(UsuarioSesionActual,
-                            idVideo,
-                            mesString);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Video.getLink().toString()));
+                startActivity(intent);
 
-                    if (id > 0){
 
-                        Toast.makeText(VerVideoInfo.this, "+1 Reproducción", Toast.LENGTH_SHORT).show();
-                        finish();
+                long id = dbRepVideos.insertarRepVideo(UsuarioSesionActual,
+                        idVideo,
+                        mesString);
 
-                    }
+                if (id > 0){
 
-                } else {
-
-                    Toast.makeText(VerVideoInfo.this, "Staff?", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerVideoInfo.this, "+1 Reproducción", Toast.LENGTH_SHORT).show();
+                    finish();
 
                 }
             }

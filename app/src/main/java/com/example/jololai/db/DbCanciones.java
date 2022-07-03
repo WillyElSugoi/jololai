@@ -98,6 +98,18 @@ public class DbCanciones extends DbHelper {
 
     }
 
+    public Boolean VerExisteCancion(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SONGS + " WHERE id = ?", new String[] {String.valueOf(id)});
+        if (cursor.getCount() > 0){
+            cursor.close();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public ArrayList<Canciones> mostrarCanciones() {
 
         DbHelper dbHelper = new DbHelper(context);
@@ -221,8 +233,8 @@ public class DbCanciones extends DbHelper {
             db.execSQL("DELETE FROM " + TABLE_SONGS + " WHERE id = '" + id + "'");
             correcto = true;
 
-            String IdS = Integer.toString(id);
-            databaseReference.child("Canciones").child(IdS).removeValue();
+            String idString = String.valueOf(id);
+            databaseReference.child("Canciones").child(idString).removeValue();
 
         } catch (Exception ex) {
             ex.toString();

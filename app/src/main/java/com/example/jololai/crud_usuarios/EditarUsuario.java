@@ -92,7 +92,7 @@ public class EditarUsuario extends AppCompatActivity {
 
                     if (contraseñaString.equals(reContraseñaString)){
 
-                        correcto = dbUsuarios.editarUsuario(UsuarioRecupeado,
+                        correcto = dbUsuarios.editarUsuario(usuarioString,
                                 comprasAlMomento,
                                     contraseñaString);
 

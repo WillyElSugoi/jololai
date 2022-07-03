@@ -16,6 +16,7 @@ public class Idols {
     private String disenador;
     private String bio;
     private byte[] imagen;
+    private String imagenString;
 
 
     public int getId() {
@@ -120,6 +121,14 @@ public class Idols {
 
     public void setNombreOriginal(String nombreOriginal) {
         this.nombreOriginal = nombreOriginal;
+    }
+
+    public String getImagenString() {
+        return imagenString;
+    }
+
+    public void setImagenString(String imagenString) {
+        this.imagenString = imagenString;
     }
 }
 

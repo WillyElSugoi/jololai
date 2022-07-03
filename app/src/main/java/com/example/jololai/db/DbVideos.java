@@ -4,10 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
 
 import com.example.jololai.entidades.Videos;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -15,9 +19,20 @@ public class DbVideos extends DbHelper {
 
     Context context;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     public DbVideos(@Nullable Context context) {
         super(context);
         this.context = context;
+    }
+
+    private void iniciarFirebase() {
+
+        FirebaseApp.initializeApp(context.getApplicationContext());
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
     }
 
     public long insertarVideo(String nombreVideo,
@@ -43,6 +58,30 @@ public class DbVideos extends DbHelper {
             values.put("id_idol", id_idol);
 
             id = db.insert(TABLE_VIDEOS, null, values);
+
+            Cursor buscarId = db.rawQuery("SELECT * FROM " + TABLE_VIDEOS + " ORDER BY 1 DESC LIMIT 1", null);
+
+            iniciarFirebase();
+
+            if (buscarId.moveToFirst()){
+                do {
+                    Videos video = new Videos();
+                    int idInt = buscarId.getInt(0);
+
+                    video.setId(idInt);
+                    video.setNombreVideo(nombreVideo);
+                    video.setGenero_video(genero_video);
+                    video.setPromocional(promocional);
+                    video.setImagenVideoString(String.valueOf(imagen_video));
+                    video.setLink(link);
+                    video.setId_idol(id_idol);
+
+                    databaseReference.child("Videos").child(String.valueOf(video.getId())).setValue(video);
+
+                } while (buscarId.moveToNext());
+            }
+
+
 
         } catch (Exception ex) {
             ex.toString();
@@ -124,6 +163,8 @@ public class DbVideos extends DbHelper {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        iniciarFirebase();
+
         try {
 
             db.execSQL("UPDATE " + TABLE_VIDEOS + " SET nombreVideo = '" + nombreVideo + "', genero_video = '" + genero_video + "'," +
@@ -131,6 +172,18 @@ public class DbVideos extends DbHelper {
                     "link = '" + link + "', id_idol = '" + id_Idol + "' WHERE id = '" + id + "' ");
 
             correcto = true;
+
+            Videos video = new Videos();
+
+            video.setId(id);
+            video.setNombreVideo(nombreVideo);
+            video.setGenero_video(genero_video);
+            video.setPromocional(promocional);
+            video.setImagenVideoString(String.valueOf(imagen_video));
+            video.setLink(link);
+            video.setId_idol(id_Idol);
+
+            databaseReference.child("Videos").child(String.valueOf(video.getId())).setValue(video);
 
         } catch (Exception ex) {
             ex.toString();
@@ -142,9 +195,23 @@ public class DbVideos extends DbHelper {
         return correcto;
     }
 
+    public Boolean VerExisteVideo(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_VIDEOS + " WHERE id = ?", new String[] {String.valueOf(id)});
+        if (cursor.getCount() > 0){
+            cursor.close();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public boolean eliminarVideo(int id) {
 
         boolean correcto = false;
+
+        iniciarFirebase();
 
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -152,6 +219,10 @@ public class DbVideos extends DbHelper {
         try {
             db.execSQL("DELETE FROM " + TABLE_VIDEOS + " WHERE id = '" + id + "'");
             correcto = true;
+
+            String idString = String.valueOf(id);
+            databaseReference.child("Videos").child(idString).removeValue();
+
         } catch (Exception ex) {
             ex.toString();
             correcto = false;
