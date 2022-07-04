@@ -81,6 +81,38 @@ public class DbComCanciones extends DbHelper {
 
     }
 
+    public void SubirComprasCanciones(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_COM_CAN, null);
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                ComCanciones comCanciones = new ComCanciones();
+
+                int idInt = recorrerBase.getInt(0);
+                comCanciones.setId(idInt);
+
+                String nombre = recorrerBase.getString(1);
+                comCanciones.setNombre_usuario(nombre);
+
+                int idCanciones = recorrerBase.getInt(2);
+                comCanciones.setId_cancion(idCanciones);
+
+                String mes = recorrerBase.getString(3);
+                comCanciones.setMes(mes);
+
+                databaseReference.child("compras_canciones").child(String.valueOf(comCanciones.getId())).setValue(comCanciones);
+
+            } while (recorrerBase.moveToNext());
+        }
+    }
+
     public ArrayList<ComCanciones> mostrarComCanciones() {
 
         DbHelper dbHelper = new DbHelper(context);

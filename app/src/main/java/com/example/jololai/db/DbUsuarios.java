@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.jololai.entidades.RepVideos;
 import com.example.jololai.entidades.Usuarios;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +63,7 @@ public class DbUsuarios extends DbHelper {
         usuarios.setUsuario(usuario);
         usuarios.setCompras_realizadas(0);
         usuarios.setContraseña(contraseña);
-        databaseReference.child("Usuario").child(usuarios.getUsuario()).setValue(usuarios);
+        databaseReference.child("usuarios").child(usuarios.getUsuario()).setValue(usuarios);
 
         if(resultado == -1){
             return false;
@@ -91,12 +92,40 @@ public class DbUsuarios extends DbHelper {
                 listaUsuarios.add(usuario);
 
             } while (cursorUsuarios.moveToNext());
-        }
-  ;
+        };
 
         cursorUsuarios.close();
 
         return listaUsuarios;
+    }
+
+    public void SubirUsuarios(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                Usuarios usuarios = new Usuarios();
+
+                String nombre = recorrerBase.getString(0);
+                usuarios.setUsuario(nombre);
+
+                int idCompras = recorrerBase.getInt(1);
+                usuarios.setCompras_realizadas(idCompras);
+
+                String pass = recorrerBase.getString(2);
+                usuarios.setContraseña(pass);
+
+                databaseReference.child("usuarios").child(String.valueOf(usuarios.getUsuario())).setValue(usuarios);
+
+            } while (recorrerBase.moveToNext());
+        }
     }
 
     public Usuarios verUsuarios(String nombreUsuario) {
@@ -161,7 +190,7 @@ public class DbUsuarios extends DbHelper {
             usuarios.setUsuario(usuarioAux);
             usuarios.setCompras_realizadas(compras_realizadas);
             usuarios.setContraseña(contraseña);
-            databaseReference.child("Usuario").child(usuarios.getUsuario()).setValue(usuarios);
+            databaseReference.child("usuarios").child(usuarios.getUsuario()).setValue(usuarios);
 
         } catch (Exception ex) {
             ex.toString();
@@ -188,7 +217,7 @@ public class DbUsuarios extends DbHelper {
             correcto = true;
 
             Log.e("eliminao", usuario);
-            databaseReference.child("Usuario").child(usuario).removeValue();
+            databaseReference.child("usuarios").child(usuario).removeValue();
 
         } catch (Exception ex) {
             ex.toString();

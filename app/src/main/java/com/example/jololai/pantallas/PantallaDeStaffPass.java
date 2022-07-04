@@ -17,6 +17,7 @@ public class PantallaDeStaffPass extends AppCompatActivity {
     EditText contraseña;
     Button botonEntrar;
     TextView passStaff;
+    String UsuarioSesionActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,18 @@ public class PantallaDeStaffPass extends AppCompatActivity {
         contraseña = findViewById(R.id.contraseñaStaff);
         botonEntrar = findViewById(R.id.botonContraseñaStaff);
         passStaff = findViewById(R.id.contraseñaStaff);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                UsuarioSesionActual = null;
+            } else {
+                UsuarioSesionActual = extras.getString("SesionActual");
+            }
+        } else {
+            UsuarioSesionActual = (String) savedInstanceState.getSerializable("SesionActual");
+        }
+
 
 
 

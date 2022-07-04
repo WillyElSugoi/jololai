@@ -133,7 +133,7 @@ public class AgregarVideos extends AppCompatActivity {
 
         /*** Spinner del nombre de la idol ***/
 
-        spinnerNombreIdolVideo = findViewById(R.id.spinnerIdolVideo);
+        spinnerNombreIdolVideo = findViewById(R.id.spinnerIdolConcierto);
 
         consultarListaIdols();
 

@@ -85,7 +85,7 @@ public class DbCanciones extends DbHelper {
 
                     Log.e("idol id", String.valueOf(id_idol));
 
-                    databaseReference.child("Canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
+                    databaseReference.child("canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
 
                 } while (awa.moveToNext());
             }
@@ -95,6 +95,50 @@ public class DbCanciones extends DbHelper {
         }
 
         return id;
+
+    }
+
+    public void SubirCanciones(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_SONGS, null);
+
+        Log.e("aaa", String.valueOf(recorrerBase));
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                Canciones cancion = new Canciones();
+                int idInt = recorrerBase.getInt(0);
+                cancion.setId(idInt);
+
+                String nombre = recorrerBase.getString(1);
+                cancion.setNombre(nombre);
+                Log.e("Nombre cancion", nombre);
+
+                String tipo_cancion = recorrerBase.getString(2);
+                cancion.setTipo_cancion(tipo_cancion);
+                Log.e("tipo cancion", tipo_cancion);
+
+                String letra_cancion = recorrerBase.getString(3);
+                cancion.setLetra_cancion(letra_cancion);
+                Log.e("letra cancion", letra_cancion);
+
+                cancion.setImagen_cancionString(String.valueOf(recorrerBase.getBlob(4)));
+
+                int IdIdol = recorrerBase.getInt(5);
+                cancion.setId_idol(IdIdol);
+                Log.e("idol id", String.valueOf(IdIdol));
+
+                databaseReference.child("canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
+
+            } while (recorrerBase.moveToNext());
+
+        }
 
     }
 
@@ -208,7 +252,7 @@ public class DbCanciones extends DbHelper {
             cancion.setId_idol(id_Idol);
             Log.e("idol id", String.valueOf(id_Idol));
 
-            databaseReference.child("Canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
+            databaseReference.child("canciones").child(String.valueOf(cancion.getId())).setValue(cancion);
 
         } catch (Exception ex) {
             ex.toString();
@@ -234,7 +278,7 @@ public class DbCanciones extends DbHelper {
             correcto = true;
 
             String idString = String.valueOf(id);
-            databaseReference.child("Canciones").child(idString).removeValue();
+            databaseReference.child("canciones").child(idString).removeValue();
 
         } catch (Exception ex) {
             ex.toString();

@@ -50,7 +50,7 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:hint="Duración del concierto"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:minHeight="48dp"
             android:textColorHint="#000000"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@+id/EditTextNombreConcierto" />
 
         <Spinner
-            android:id="@+id/spinnerIdolVideo"
+            android:id="@+id/spinnerIdolConcierto"
             android:layout_width="368dp"
             android:layout_height="60dp"
             android:layout_marginStart="8dp"
@@ -101,7 +101,7 @@
             android:textColorHint="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerIdolVideo"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerIdolConcierto"
             tools:ignore="TextContrastCheck" />
 
 

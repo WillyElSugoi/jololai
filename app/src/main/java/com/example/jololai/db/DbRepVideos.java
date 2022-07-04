@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
+import com.example.jololai.entidades.ComCanciones;
 import com.example.jololai.entidades.RepVideos;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
@@ -109,6 +110,38 @@ public class DbRepVideos extends DbHelper {
 
         return listaRepVideos;
 
+    }
+
+    public void SubirRepVideos(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_REP_VID, null);
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                RepVideos repVideos = new RepVideos();
+
+                int idInt = recorrerBase.getInt(0);
+                repVideos.setId(idInt);
+
+                String nombre = recorrerBase.getString(1);
+                repVideos.setNombre_usuario(nombre);
+
+                int idvideo = recorrerBase.getInt(2);
+                repVideos.setId_video(idvideo);
+
+                String mes = recorrerBase.getString(3);
+                repVideos.setMes(mes);
+
+                databaseReference.child("reproduccion_videos").child(String.valueOf(repVideos.getId())).setValue(repVideos);
+
+            } while (recorrerBase.moveToNext());
+        }
     }
 
     public RepVideos verRepVideo(int id) {

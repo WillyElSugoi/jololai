@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 56;
+    private static final int DATABASE_VERSION = 57;
     private static final String DATABASE_NOMBRE = "holoDexDB.db";
     public static final String TABLE_IDOLS = "t_miembros";
     public static final String TABLE_SONGS = "t_canciones";
@@ -17,6 +17,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_REP_VID = "t_rep_videos";
     public static final String TABLE_COM_CAN = "t_com_canciones";
     public static final String TABLE_CONCIERTO = "t_concierto";
+    public static final String TABLE_COM_CON = "t_com_concierto";
 
 
     public DbHelper(@Nullable Context context) {
@@ -76,11 +77,16 @@ public class DbHelper extends SQLiteOpenHelper {
                 "mes TEXT NOT NULL)");
 
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_CONCIERTO + "(" +
-                "ID_Concierto PRIMARY KEY AUTOINCREMENT," +
+                "ID_Concierto INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Nombre_Concierto TEXT NOT NULL," +
                 "ID_Idol INTEGER," +
                 "Fecha_Concierto TEXT NOT NULL," +
                 "Duracion_Minutos INTEGER)");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_COM_CON + "(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre_usuario TEXT NOT NULL," +
+                "id_concierto INTEGER)");
 
     }
 
@@ -93,6 +99,8 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE " + TABLE_VIDEOS);
         sqLiteDatabase.execSQL("DROP TABLE " + TABLE_REP_VID);
         sqLiteDatabase.execSQL("DROP TABLE " + TABLE_COM_CAN);
+        sqLiteDatabase.execSQL("DROP TABLE " + TABLE_CONCIERTO);
+        sqLiteDatabase.execSQL("DROP TABLE " + TABLE_COM_CON);
         onCreate(sqLiteDatabase);
 
     }

@@ -16,6 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Jololai">
         <activity
+            android:name=".crud_conciertos.EditarConcierto"
+            android:exported="false" />
+        <activity
+            android:name=".crud_conciertos.VerConciertoInfo"
+            android:exported="false" />
+        <activity
+            android:name=".crud_conciertos.ListaDeConciertos"
+            android:exported="false" />
+        <activity
+            android:name=".pantallas.PantallaDeConciertos"
+            android:exported="false" />
+        <activity
             android:name=".crud_conciertos.AgregarConcierto"
             android:exported="false" />
         <activity

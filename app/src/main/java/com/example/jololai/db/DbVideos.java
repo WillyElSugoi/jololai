@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.jololai.entidades.Canciones;
 import com.example.jololai.entidades.Videos;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
@@ -76,7 +78,7 @@ public class DbVideos extends DbHelper {
                     video.setLink(link);
                     video.setId_idol(id_idol);
 
-                    databaseReference.child("Videos").child(String.valueOf(video.getId())).setValue(video);
+                    databaseReference.child("videos").child(String.valueOf(video.getId())).setValue(video);
 
                 } while (buscarId.moveToNext());
             }
@@ -122,6 +124,47 @@ public class DbVideos extends DbHelper {
         cursorVideo.close();
 
         return listaVideos;
+    }
+
+    public void SubirVideos(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_VIDEOS, null);
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                Videos videos = new Videos();
+                int idInt = recorrerBase.getInt(0);
+                videos.setId(idInt);
+
+                String nombre = recorrerBase.getString(1);
+                videos.setNombreVideo(nombre);
+
+                String genero = recorrerBase.getString(2);
+                videos.setGenero_video(genero);
+
+                String promocional = recorrerBase.getString(3);
+                videos.setPromocional(promocional);
+
+                videos.setImagenVideoString(String.valueOf(recorrerBase.getBlob(4)));
+
+                String link = recorrerBase.getString(5);
+                videos.setLink(link);
+
+                int idIdol = recorrerBase.getInt(6);
+                videos.setId_idol(idIdol);
+
+                databaseReference.child("videos").child(String.valueOf(videos.getId())).setValue(videos);
+
+            } while (recorrerBase.moveToNext());
+
+        }
+
     }
 
     public Videos verVideo(int id) {
@@ -183,7 +226,7 @@ public class DbVideos extends DbHelper {
             video.setLink(link);
             video.setId_idol(id_Idol);
 
-            databaseReference.child("Videos").child(String.valueOf(video.getId())).setValue(video);
+            databaseReference.child("videos").child(String.valueOf(video.getId())).setValue(video);
 
         } catch (Exception ex) {
             ex.toString();
@@ -221,7 +264,7 @@ public class DbVideos extends DbHelper {
             correcto = true;
 
             String idString = String.valueOf(id);
-            databaseReference.child("Videos").child(idString).removeValue();
+            databaseReference.child("videos").child(idString).removeValue();
 
         } catch (Exception ex) {
             ex.toString();

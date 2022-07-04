@@ -69,10 +69,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.518"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerIdolVideo" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerIdolConcierto" />
 
         <Spinner
-            android:id="@+id/spinnerIdolVideo"
+            android:id="@+id/spinnerIdolConcierto"
             android:layout_width="368dp"
             android:layout_height="60dp"
             android:layout_marginStart="8dp"

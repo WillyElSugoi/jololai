@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -51,7 +50,7 @@ public class PantallaDeCanciones extends AppCompatActivity {
             }
         });
 
-        botonVerCanciones = findViewById(R.id.PantallaVerCanciones);
+        botonVerCanciones = findViewById(R.id.PantallaVerConciertos);
 
         botonVerCanciones.setOnClickListener(new View.OnClickListener() {
             @Override

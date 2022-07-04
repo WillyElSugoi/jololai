@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.DebugUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.jololai.entidades.Canciones;
 import com.example.jololai.entidades.Idols;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
@@ -93,7 +95,7 @@ public class DbIdols extends DbHelper {
                     idol.setBio(bio);
                     idol.setImagenString(String.valueOf(imagen));
 
-                    databaseReference.child("Idols").child(String.valueOf(idol.getId())).setValue(idol);
+                    databaseReference.child("idols").child(String.valueOf(idol.getId())).setValue(idol);
 
                 } while (buscarId.moveToNext());
             }
@@ -104,6 +106,66 @@ public class DbIdols extends DbHelper {
 
         return id;
     }
+
+    public void SubirIdols(){
+
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        iniciarFirebase();
+
+        Cursor recorrerBase = db.rawQuery("SELECT * FROM " + TABLE_IDOLS, null);
+
+        if (recorrerBase.moveToFirst()){
+            do {
+                Idols idols = new Idols();
+                int idInt = recorrerBase.getInt(0);
+                idols.setId(idInt);
+
+                String nombre = recorrerBase.getString(1);
+                idols.setNombre(nombre);
+
+                String nombreOriginal = recorrerBase.getString(2);
+                idols.setNombreOriginal(nombreOriginal);
+
+                String estado = recorrerBase.getString(3);
+                idols.setEstado(estado);
+
+                String unidad = recorrerBase.getString(4);
+                idols.setUnidad(unidad);
+
+                String generacio = recorrerBase.getString(5);
+                idols.setGeneracion(generacio);
+
+                String debut = recorrerBase.getString(6);
+                idols.setDebut(debut);
+
+                String nick = recorrerBase.getString(7);
+                idols.setNickname(nick);
+
+                String cumple = recorrerBase.getString(8);
+                idols.setCumple(cumple);
+
+                String altura = recorrerBase.getString(9);
+                idols.setAltura(altura);
+
+                String diseñador = recorrerBase.getString(10);
+                idols.setDisenador(diseñador);
+
+                String bio = recorrerBase.getString(11);
+                idols.setBio(bio);
+
+                idols.setImagenString(String.valueOf(recorrerBase.getBlob(12)));
+
+                databaseReference.child("idols").child(String.valueOf(idols.getId())).setValue(idols);
+
+            } while (recorrerBase.moveToNext());
+
+        }
+
+    }
+
+
 
     public ArrayList<Idols> mostrarIdols() {
 
@@ -222,7 +284,7 @@ public class DbIdols extends DbHelper {
             idol.setBio(bio);
             idol.setImagenString(String.valueOf(imagen));
 
-            databaseReference.child("Idols").child(String.valueOf(idol.getId())).setValue(idol);
+            databaseReference.child("idols").child(String.valueOf(idol.getId())).setValue(idol);
 
         } catch (Exception ex) {
             ex.toString();
@@ -248,7 +310,7 @@ public class DbIdols extends DbHelper {
             correcto = true;
 
             String idString = String.valueOf(id);
-            databaseReference.child("Idols").child(idString).removeValue();
+            databaseReference.child("idols").child(idString).removeValue();
 
         } catch (Exception ex) {
             ex.toString();
